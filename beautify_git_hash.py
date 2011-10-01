@@ -51,7 +51,9 @@ def commit_line_to_format(line, aggregate_values):
 
 def commit_to_format(commit):
     aggregate_values = {}
-    return '\n'.join(commit_line_to_format(line, aggregate_values) for line in commit.split('\n')), aggregate_values
+    commit_format = '\n'.join(commit_line_to_format(line, aggregate_values)
+                              for line in commit.split('\n'))
+    return commit_format, aggregate_values
 
 def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
     commit_format, old_values = commit_to_format(old_commit)
@@ -71,7 +73,7 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
                 )
     raise Exception('Unable to find beautiful hash!')
 
-if __name__ == '__main__':
+def main():
     try:
         _, prefix = sys.argv
     except:
@@ -80,3 +82,6 @@ if __name__ == '__main__':
     proposal = find_beautiful_git_hash(load_git_commit('HEAD'), prefix)
     print 'Proposal:'
     print proposal
+
+if __name__ == '__main__':
+    main()
