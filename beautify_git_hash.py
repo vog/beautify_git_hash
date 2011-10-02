@@ -35,7 +35,13 @@ In that case you can either chosse a different prefix (maybe a
 shorter one), or you can modify your commit slightly (maybe just
 the commit message). Then try again.
 
-You can add this stupid script as post-commit hook if you like:
+You can use the auto-prefix feature if you want your prefixes
+to be 0001a, 0002a, 0003a, etc:
+
+    ./beautify_git_hash.py --auto
+
+Finally, you can add this stupid script as post-commit hook
+if you like:
 
     ln -s /.../beautify_git_hash/post-commit .git/hooks/post-commit
 
