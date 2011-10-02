@@ -61,16 +61,17 @@ THE SOFTWARE.
 """
 
 import hashlib
+import os
 import subprocess
 import sys
 
-def subprocess_check_output(cmd):
+def subprocess_check_output(cmd, **kwargs):
     if hasattr(subprocess, 'check_output'):
         # Python >= 2.7
-        return subprocess.check_output(cmd)
+        return subprocess.check_output(cmd, **kwargs)
     else:
         # Python < 2.7
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, **kwargs)
         output, error = process.communicate()
         retcode = process.poll()
         if retcode:
@@ -123,7 +124,7 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
 
 def proposed_prefix(previous_commit, number_length=4):
     try:
-        output = subprocess_check_output(['git', 'rev-parse', previous_commit])
+        output = subprocess_check_output(['git', 'rev-parse', previous_commit], stderr=file(os.devnull))
         previous_commit_hash = output.rstrip('\n')
         new_number = int(previous_commit_hash[:number_length], 10) + 1
     except subprocess.CalledProcessError:
