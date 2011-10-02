@@ -87,13 +87,13 @@ def git_commit_hash(commit):
 def commit_line_to_format(line, aggregate_values):
     format_words = line.replace('%', '%%').split(' ')
     if format_words[0] == 'author':
-        aggregate_values['author_date'] = int(format_words[-2])
+        aggregate_values['author_date_timestamp'] = int(format_words[-2])
         aggregate_values['author_date_tz'] = format_words[-1]
-        format_words[-2] = '%(author_date)i'
+        format_words[-2] = '%(author_date_timestamp)i'
     elif format_words[0] == 'committer':
-        aggregate_values['committer_date'] = int(format_words[-2])
+        aggregate_values['committer_date_timestamp'] = int(format_words[-2])
         aggregate_values['committer_date_tz'] = format_words[-1]
-        format_words[-2] = '%(committer_date)i'
+        format_words[-2] = '%(committer_date_timestamp)i'
     return ' '.join(format_words)
 
 def commit_to_format(commit):
@@ -107,8 +107,8 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
     for committer_date_offset in xrange(max_minutes * 60 + 1):
         for author_date_offset in xrange(committer_date_offset + 1):
             new_values = {
-                'author_date': old_values['author_date'] + author_date_offset,
-                'committer_date': old_values['committer_date'] + committer_date_offset,
+                'author_date_timestamp': old_values['author_date_timestamp'] + author_date_offset,
+                'committer_date_timestamp': old_values['committer_date_timestamp'] + committer_date_offset,
             }
             commit = commit_format % new_values
             if git_commit_hash(commit).startswith(prefix):
@@ -116,9 +116,9 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
                     return None
                 else:
                     return "GIT_COMMITTER_DATE='%i %s' git commit --amend -C HEAD --date='%i %s'" % (
-                        new_values['committer_date'],
+                        new_values['committer_date_timestamp'],
                         old_values['committer_date_tz'],
-                        new_values['author_date'],
+                        new_values['author_date_timestamp'],
                         old_values['author_date_tz'],
                     )
     raise Exception('Unable to find beautiful hash!')
