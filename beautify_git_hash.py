@@ -121,7 +121,17 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
                     }
     raise Exception('Unable to find beautiful hash!')
 
-def show_proposal_for_git_head(prefix):
+def proposed_prefix(previous_commit, number_length=4):
+    try:
+        previous_commit_hash = subprocess_check_output(['git', 'rev-parse', previous_commit]).rstrip('\n')
+        new_number = int(previous_commit_hash[:number_length], 10) + 1
+    except subprocess.CalledProcessError:
+        new_number = 1
+    return str(new_number).rjust(number_length, '0') + 'a'
+
+def show_proposal_for_git_head(prefix=None):
+    if prefix is None:
+        prefix = proposed_prefix('HEAD^')
     old_commit = load_git_commit('HEAD')
     values = find_beautiful_git_hash(old_commit, prefix)
     if values is None:
@@ -135,9 +145,12 @@ def main():
         _, prefix = sys.argv
     except:
         print >>sys.stderr, 'Usage'
-        print >>sys.stderr, '    %s <prefix>' % (sys.argv[0],)
+        print >>sys.stderr, '    %s <prefix>|--auto' % (sys.argv[0],)
         sys.exit(1)
-    show_proposal_for_git_head(prefix)
+    if prefix == '--auto':
+        show_proposal_for_git_head(None)
+    else:
+        show_proposal_for_git_head(prefix)
 
 if __name__ == '__main__':
     main()
