@@ -1,6 +1,43 @@
 #!/usr/bin/env python
 
-"""Beautify the Git commit hash
+"""Beautify the Git commit hash!
+
+This is a little useless toy inspired by BitCoin's "proof of work"
+concept. It allows you to modify your Git commit to enforce a
+certain prefix on the Git commit hash.
+
+Start this script from within your Git repository, and specify
+the prefix you want your last commit to have:
+
+    ./beautify_git_hash.py 0001a
+
+It proposes a Git command that adjusts the committer timestamp
+and author timestamp accordingly:
+
+    Proposal:
+    GIT_COMMITTER_DATE='1317498969 +0200' git commit --amend -C HEAD --date='1317498857 +0200'
+
+The timestamps will only be increased, i.e. they change to the
+future and never to the past. Also, they won't be increased by
+more than 30 minutes, and the author timestamp will never be
+increased more than the committer timestamp. This should keep
+the timestamps sane.
+
+Note that there is always a small risk of failure in this kind
+of algorithm. So if you are unlucky, you will get an error
+message:
+
+    Traceback (most recent call last):
+      ...
+    Exception: Unable to find beautiful hash!
+
+In that case you can either chosse a different prefix (maybe a
+shorter one), or you can modify your commit slightly (maybe just
+the commit message). Then try again.
+
+Have fun!
+
+
 
 Copyright (C) 2011 by Volker Grabsch <vog@notjusthosting.com>
 
