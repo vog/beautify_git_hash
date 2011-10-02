@@ -27,11 +27,11 @@ import hashlib
 import subprocess
 import sys
 
-if not hasattr(subprocess, 'check_output'):
-    raise Exception('Please run this script with Python >= 2.7')
-
 def load_git_commit(commit_id):
-    return subprocess.check_output(['git', 'cat-file', 'commit', commit_id])
+    proc = subprocess.Popen(['git', 'cat-file', 'commit', commit_id],
+                            stdout=subprocess.PIPE)
+    out, err = proc.communicate()
+    return out
 
 def git_commit_hash(commit):
     object = 'commit %i\x00%s' % (len(commit), commit)

@@ -1,0 +1,25 @@
+#!/bin/sh
+if ! type beautify_git_hash.py >/dev/null 2>&1
+then
+	printf 'git post-commit hook error: ' >&2
+	printf 'copy beautify_git_hash.py into your $PATH\n' >&2
+	exit 1
+fi
+limit=10000
+config_limit=$(git config hooks.beautylimit)
+if test -n "$config_limit"
+then
+	limit="$config_limit"
+fi
+next=$(git rev-list --full-history HEAD |
+	wc -l |
+	perl -pe '
+		s/^\s*//;
+		my $count = $_ + 0;
+		my $limit = '"$limit"';
+		my $num = $count % $limit;
+		my $fmt_len = length(sprintf("%d", $limit-1));
+		my $fmt = "%0" . $fmt_len . "d";
+		$_ = sprintf($fmt, $num);')
+
+beautify_git_hash.py "$next"
