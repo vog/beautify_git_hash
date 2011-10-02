@@ -1,5 +1,5 @@
 #!/bin/sh
-if ! test beautify_git_hash.py
+if ! type beautify_git_hash.py >/dev/null 2>&1
 then
 	printf 'git post-commit hook error: ' >&2
 	printf 'copy beautify_git_hash.py into your $PATH\n' >&2
