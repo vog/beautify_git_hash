@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+"""Hook script to beautify the Git commit hash"""
+
+import beautify_git_hash
+beautify_git_hash.show_proposal_for_git_head(None)
