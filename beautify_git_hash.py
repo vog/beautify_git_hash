@@ -123,7 +123,8 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
 
 def proposed_prefix(previous_commit, number_length=4):
     try:
-        previous_commit_hash = subprocess_check_output(['git', 'rev-parse', previous_commit]).rstrip('\n')
+        output = subprocess_check_output(['git', 'rev-parse', previous_commit])
+        previous_commit_hash = output.rstrip('\n')
         new_number = int(previous_commit_hash[:number_length], 10) + 1
     except subprocess.CalledProcessError:
         new_number = 1
