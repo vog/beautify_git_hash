@@ -134,7 +134,8 @@ def main():
     try:
         _, prefix = sys.argv
     except:
-        print >>sys.stderr, 'Usage: %s PREFIX' % (sys.argv[0],)
+        print >>sys.stderr, 'Usage'
+        print >>sys.stderr, '    %s <prefix>' % (sys.argv[0],)
         sys.exit(1)
     show_proposal_for_git_head(prefix)
 
