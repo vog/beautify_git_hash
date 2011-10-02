@@ -115,13 +115,20 @@ def find_beautiful_git_hash(old_commit, prefix, max_minutes=30):
                 if author_date_offset == committer_date_offset == 0:
                     return None
                 else:
-                    return "GIT_COMMITTER_DATE='%i %s' git commit --amend -C HEAD --date='%i %s'" % (
-                        new_values['committer_date_timestamp'],
-                        old_values['committer_date_tz'],
-                        new_values['author_date_timestamp'],
-                        old_values['author_date_tz'],
-                    )
+                    return {
+                        'committer_date': '%i %s' % (new_values['committer_date_timestamp'], old_values['committer_date_tz']),
+                        'author_date': '%i %s' % (new_values['author_date_timestamp'], old_values['author_date_tz']),
+                    }
     raise Exception('Unable to find beautiful hash!')
+
+def show_proposal_for_git_head(prefix):
+    old_commit = load_git_commit('HEAD')
+    values = find_beautiful_git_hash(old_commit, prefix)
+    if values is None:
+        print 'Nothing to do'
+    else:
+        print 'Proposal:'
+        print "GIT_COMMITTER_DATE='%(committer_date)s' git commit --amend -C HEAD --date='%(author_date)s'" % values
 
 def main():
     try:
@@ -129,12 +136,7 @@ def main():
     except:
         print >>sys.stderr, 'Usage: %s PREFIX' % (sys.argv[0],)
         sys.exit(1)
-    proposal = find_beautiful_git_hash(load_git_commit('HEAD'), prefix)
-    if proposal is None:
-        print 'Nothing to do'
-    else:
-        print 'Proposal:'
-        print proposal
+    show_proposal_for_git_head(prefix)
 
 if __name__ == '__main__':
     main()
