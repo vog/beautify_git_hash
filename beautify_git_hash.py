@@ -3,7 +3,7 @@
 """Beautify the Git commit hash!
 
 This is a little useless toy inspired by BitCoin's "proof of work"
-concept. It allows you to modify your Git commit to enforce a
+concept. It enables you to modify your Git commit to enforce a
 certain prefix on the Git commit hash.
 
 Start this script from within your Git repository, and specify
