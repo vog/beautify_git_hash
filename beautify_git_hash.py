@@ -74,6 +74,9 @@ import hashlib
 import os
 import subprocess
 import sys
+from string import hexdigits
+
+VALID_HASH_CHARACTERS = hexdigits.lower()
 
 def subprocess_check_output(cmd, **kwargs):
     if hasattr(subprocess, 'check_output'):
@@ -152,6 +155,12 @@ def show_proposal_for_git_head(prefix=None):
         print 'Proposal:'
         print "GIT_COMMITTER_DATE='%(committer_date)s' git commit --amend -C HEAD --date='%(author_date)s'" % values
 
+def is_valid_prefix(prefix):
+    for char in prefix:
+        if char not in VALID_HASH_CHARACTERS:
+            return False
+    return True
+
 def main():
     try:
         _, prefix = sys.argv
@@ -162,6 +171,10 @@ def main():
     if prefix == '--auto':
         show_proposal_for_git_head(None)
     else:
+        if not is_valid_prefix(prefix):
+            print >>sys.stderr, 'Prefix must only contain lower case hex digits:'
+            print >>sys.stderr, '    '+VALID_HASH_CHARACTERS
+            sys.exit(1)
         show_proposal_for_git_head(prefix)
 
 if __name__ == '__main__':
