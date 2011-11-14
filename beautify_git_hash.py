@@ -31,7 +31,7 @@ message:
       ...
     Exception: Unable to find beautiful hash!
 
-In that case you can either chosse a different prefix (maybe a
+In that case you can either choose a different prefix (maybe a
 shorter one), or you can modify your commit slightly (maybe just
 the commit message). Then try again.
 
