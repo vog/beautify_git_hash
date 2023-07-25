@@ -49,7 +49,7 @@ Have fun!
 
 
 
-Copyright (C) 2011 by Volker Grabsch <vog@notjusthosting.com>
+Copyright (C) Volker Diels-Grabsch <v@njh.eu>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
